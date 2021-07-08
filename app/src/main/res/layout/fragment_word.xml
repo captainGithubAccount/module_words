@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".WordFragment">
+
+        <!-- TODO: Update blank fragment layout -->
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_wordfragment_jumb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="18dp"
+            android:layout_marginBottom="18dp"
+            android:clickable="true"
+            android:src="@drawable/ic_wordfragment_add"
+            app:backgroundTint="#00BCD4"
+            app:tint="@android:color/white"
+            android:contentDescription="TODO"
+            android:focusable="true" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_wordfragment_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+</layout>
