@@ -21,6 +21,9 @@ import com.google.android.play.core.splitinstall.d
 import com.lwj_template.moudle_word.databinding.FragmentAddBinding
 
 
+
+
+
 //添加单词页面
 class AddFragment : Fragment() {
 
@@ -74,24 +77,29 @@ class AddFragment : Fragment() {
         edEnglish.requestFocus()
         showSoftKeyboard(edEnglish)
 
-//        TextWatcher监听, 当edEnglish和edChinese内都有内容时候隐藏软键盘
-        edEnglish.addTextChangedListener { object :TextWatcher{
-            override fun afterTextChanged(s: Editable?) {
-                TODO("Not yet implemented")
-            }
+//      给两个控件添加监听
+        edEnglish.addTextChangedListener(textWatcher)
+        edChinese.addTextChangedListener(textWatcher)
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                TODO("Not yet implemented")
-            }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(edEnglish != null && edChinese != null){
-                    floatActionButtonAdd.isEnabled = true
-                    hideSoftKeyboard(edEnglish)
-                }
-            }
+    }
 
-        } }
+    //        TextWatcher监听, 当edEnglish和edChinese内都有内容时候隐藏软键盘
+    val textWatcher:TextWatcher =  object :TextWatcher{
+        override fun afterTextChanged(s: Editable?) {
+
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            val english = edEnglish.text.toString().trim()
+            val chinese = edChinese.text.toString().trim()
+            floatActionButtonAdd.isEnabled = !english.isEmpty() && !chinese.isEmpty()
+        }
+
     }
 
 
