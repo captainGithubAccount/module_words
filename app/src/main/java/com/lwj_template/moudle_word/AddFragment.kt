@@ -1,9 +1,7 @@
 package com.lwj_template.moudle_word
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.os.Bundle
-import android.os.IBinder
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
@@ -12,12 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.play.core.splitinstall.d
 import com.lwj_template.moudle_word.databinding.FragmentAddBinding
 
 
@@ -35,6 +31,10 @@ class AddFragment : Fragment() {
     lateinit var edEnglish: EditText
 
     lateinit var edChinese: EditText
+    private val wordViewModel: WordViewModel by viewModels<WordViewModel>{
+        WordViewModelFactory((activity?.application as WordsApplication).repository)
+    }
+
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -68,9 +68,15 @@ class AddFragment : Fragment() {
     private fun initEvent() {
         //        floatActionButtonAdd.setOnClickListener({view -> Toast.makeText(getActivity(), "no", Toast.LENGTH_SHORT)})
 
-        //j进来禁止使用提交按钮, 直到用户输入了英文和中文才可以使用提交按钮
+        //进来禁止使用提交按钮, 直到用户输入了英文和中文才可以使用提交按钮
         floatActionButtonAdd?.run{
             isEnabled = false
+            setOnClickListener { view ->
+                val english = edEnglish.text.toString().trim()
+                val chinese = edChinese.text.toString().trim()
+                wordViewModel.insertWords(WordEntity( 18,english, chinese))
+                findNavController().navigate(R.id.wordFragment)
+            }
         }
 
         //editText控件获取焦点

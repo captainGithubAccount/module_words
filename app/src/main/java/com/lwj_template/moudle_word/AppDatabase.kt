@@ -1,8 +1,6 @@
 package com.lwj_template.moudle_word
 
-import android.app.Application
 import android.content.Context
-import androidx.compose.ui.text.android.animation.SegmentType
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -61,7 +59,7 @@ abstract class AppDatabase : RoomDatabase(){
 
 
             for(i in 0..10){
-                var word = WordEntity(i, "hello", "你好", false)
+                var word = WordEntity( i,"hello", "你好")
                 wordDao.insertWord(word)
             }
         }

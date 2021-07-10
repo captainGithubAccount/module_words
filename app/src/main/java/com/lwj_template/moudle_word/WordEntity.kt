@@ -7,7 +7,12 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "words")
 data class WordEntity(
-        @PrimaryKey @NonNull val id: Int,
+        @PrimaryKey val id: Int,
+
         @ColumnInfo(name = "english") @NonNull val englishMean: String,
         @ColumnInfo(name = "chinese") @NonNull val chineseMean: String,
-        @ColumnInfo(name = "isHide") @NonNull val isHideChineseMean: Boolean)
+        @ColumnInfo(name = "isHide") @NonNull val isHideChineseMean: Boolean = false,
+        )
+
+
+

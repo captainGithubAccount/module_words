@@ -25,6 +25,10 @@ class WordFragment : Fragment() {
     lateinit var floatingActionButton: FloatingActionButton
 
     lateinit var wordAdapter: WordAdapter
+    val wordViewModel: WordViewModel by viewModels<WordViewModel> {
+        WordViewModelFactory((activity?.application as WordsApplication).repository)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,9 +53,7 @@ class WordFragment : Fragment() {
 
     private fun initData() {
         initRecyclerView()
-        val wordViewModel: WordViewModel by viewModels<WordViewModel> {
-            WordViewModelFactory((activity?.application as WordsApplication).repository)
-        }
+
         wordViewModel.allWords?.observe(requireActivity(), Observer {
 
             wordList -> wordList?.run{wordAdapter.submitList(this)}

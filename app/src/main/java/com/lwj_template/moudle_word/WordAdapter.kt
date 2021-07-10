@@ -9,12 +9,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.lwj_template.moudle_word.databinding.WordItemBinding
+
+import com.lwj_template.moudle_word.databinding.WordItemContentBinding
 
 
 class WordAdapter: ListAdapter<WordEntity, WordAdapter.WordViewHolder>(DIFF_CALLBACK) {
 
-    class WordViewHolder(binding: WordItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class WordViewHolder(binding: WordItemContentBinding) : RecyclerView.ViewHolder(binding.root) {
         val tvId: TextView
         val tvEnglish: TextView
         val tvChinese: TextView
@@ -50,7 +51,7 @@ class WordAdapter: ListAdapter<WordEntity, WordAdapter.WordViewHolder>(DIFF_CALL
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
         val inflater: LayoutInflater = LayoutInflater.from(parent.context)
-        val binding:WordItemBinding  = DataBindingUtil.inflate(inflater, R.layout.word_item, parent, false)
+        val binding:WordItemContentBinding  = DataBindingUtil.inflate(inflater, R.layout.word_item_content, parent, false)
         return WordViewHolder(binding)
     }
 

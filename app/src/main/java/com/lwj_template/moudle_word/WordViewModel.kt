@@ -4,6 +4,8 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
 class WordViewModel(private val _wordRepository: WordRepository): ViewModel() {
     val allWords:LiveData<List<WordEntity>> by lazy { _wordRepository.allWords }
@@ -15,19 +17,26 @@ class WordViewModel(private val _wordRepository: WordRepository): ViewModel() {
     }
 
     @WorkerThread
-    suspend fun insertWords(vararg wordEntity: WordEntity){
-        _wordRepository.insertWords()
+    fun insertWords(vararg wordEntity: WordEntity){
+        viewModelScope.launch {
+            _wordRepository.insertWords(*wordEntity)
+        }
+
     }
 
     @WorkerThread
-    suspend fun deleteWords(vararg wordEntity: WordEntity){
-        _wordRepository.deleteWords(*wordEntity)
+    fun deleteWords(vararg wordEntity: WordEntity){
+        viewModelScope.launch {
+            _wordRepository.deleteWords(*wordEntity)
+        }
     }
 
     //    清空数据
     @WorkerThread
-    suspend fun deleteAllWords(){
-        _wordRepository.deleteAllWords()
+    fun deleteAllWords(){
+        viewModelScope.launch {
+            _wordRepository.deleteAllWords()
+        }
     }
 
 
