@@ -2,6 +2,7 @@ package com.lwj_template.moudle_word
 
 import android.app.SearchManager
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.view.*
@@ -12,6 +13,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.SearchView
 import androidx.annotation.DrawableRes
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -145,10 +147,39 @@ class WordFragment : Fragment() {
             })
         }
 
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
 
+        var alertDialog: AlertDialog? = null
+        when(item.itemId) {
+            R.id.clear_word_menu ->
+                alertDialog = activity?.let {
+                    val builder = AlertDialog.Builder(it)
+                    builder.apply {
+                        setTitle("您确定清空所有单词吗?")
+                        setMessage("清空了就没有了喔, 谨慎操作!!!")
+                        setPositiveButton("确定",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    // User clicked OK button
+                                    wordViewModel.deleteAllWords()
+                                })
+                        setNegativeButton("取消",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    // User cancelled the dialog
+                                })
+                    }
+                    // Set other dialog properties
 
 
+                    // Create the AlertDialog
+                    builder.create()
+                    builder.show()
+                }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
 

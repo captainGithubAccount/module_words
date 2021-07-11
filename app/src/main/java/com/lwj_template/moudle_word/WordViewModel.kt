@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class WordViewModel(private val _wordRepository: WordRepository): ViewModel() {
     val allWords:LiveData<List<WordEntity>> by lazy { _wordRepository.allWords }
@@ -19,7 +21,9 @@ class WordViewModel(private val _wordRepository: WordRepository): ViewModel() {
     @WorkerThread
     fun insertWords(vararg wordEntity: WordEntity){
         viewModelScope.launch {
-            _wordRepository.insertWords(*wordEntity)
+            withContext(Dispatchers.Default){
+                _wordRepository.insertWords(*wordEntity)
+            }
         }
 
     }
@@ -27,22 +31,29 @@ class WordViewModel(private val _wordRepository: WordRepository): ViewModel() {
     @WorkerThread
     fun deleteWords(vararg wordEntity: WordEntity){
         viewModelScope.launch {
-            _wordRepository.deleteWords(*wordEntity)
+            withContext(Dispatchers.Default){
+                _wordRepository.deleteWords(*wordEntity)
+            }
         }
     }
 
     //    清空数据
-    @WorkerThread
+
     fun deleteAllWords(){
         viewModelScope.launch {
-            _wordRepository.deleteAllWords()
+            withContext(Dispatchers.Default){
+                _wordRepository.deleteAllWords()
+            }
+
         }
     }
 
     @WorkerThread
     fun updateWords(vararg wordEntity: WordEntity){
         viewModelScope.launch {
-            _wordRepository.updateWords(*wordEntity)
+            withContext(Dispatchers.Default){
+                _wordRepository.updateWords(*wordEntity)
+            }
         }
     }
 
