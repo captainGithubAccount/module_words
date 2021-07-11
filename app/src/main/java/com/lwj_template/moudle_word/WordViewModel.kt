@@ -39,6 +39,13 @@ class WordViewModel(private val _wordRepository: WordRepository): ViewModel() {
         }
     }
 
+    @WorkerThread
+    fun updateWords(vararg wordEntity: WordEntity){
+        viewModelScope.launch {
+            _wordRepository.updateWords(*wordEntity)
+        }
+    }
+
 
 
 }

@@ -36,4 +36,9 @@ class WordRepository(private var _wordDao: WordDao) {
     suspend fun deleteAllWords(){
         _wordDao.deleteAllWords()
     }
+
+    @WorkerThread
+    suspend fun updateWords(vararg wordEntity: WordEntity){
+        _wordDao.updateWord(*wordEntity)
+    }
 }

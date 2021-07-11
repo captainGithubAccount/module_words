@@ -15,10 +15,12 @@
             android:id="@+id/cv_word_item"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
             android:layout_marginStart="8dp"
+
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="4dp">
+            android:layout_marginBottom="2dp"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -69,6 +71,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="TextView"
+                        android:textColor="@color/black"
                         android:textSize="24sp"
                         app:layout_constraintBottom_toTopOf="@+id/tv_word_chinese"
                         app:layout_constraintEnd_toEndOf="parent"

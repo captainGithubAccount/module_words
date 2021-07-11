@@ -1,15 +1,14 @@
 package com.lwj_template.moudle_word
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 //word实体类对应的Dao层
 @Dao
 interface WordDao {
 
+    @Update
+    suspend fun updateWord(vararg words: WordEntity)
 
     @Insert
     suspend fun insertWord(vararg words: WordEntity)

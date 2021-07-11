@@ -4,14 +4,14 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.lwj_template.moudle_word.databinding.FragmentAddBinding
@@ -61,6 +61,12 @@ class AddFragment : Fragment() {
 
     }
 
+    private fun initView() {
+        floatActionButtonAdd = binding.floatingActionButton
+        edEnglish = binding.edEnglish
+        edChinese = binding.edChinese
+    }
+
     private fun initData() {
 
     }
@@ -74,8 +80,9 @@ class AddFragment : Fragment() {
             setOnClickListener { view ->
                 val english = edEnglish.text.toString().trim()
                 val chinese = edChinese.text.toString().trim()
-                wordViewModel.insertWords(WordEntity( 18,english, chinese))
-                findNavController().navigate(R.id.wordFragment)
+                wordViewModel.insertWords(WordEntity( english, chinese))
+
+                findNavController().navigateUp()
             }
         }
 
@@ -83,14 +90,12 @@ class AddFragment : Fragment() {
         edEnglish.requestFocus()
         showSoftKeyboard(edEnglish)
 
-//      给两个控件添加监听
+    //给两个控件添加监听
         edEnglish.addTextChangedListener(textWatcher)
         edChinese.addTextChangedListener(textWatcher)
-
-
     }
 
-    //        TextWatcher监听, 当edEnglish和edChinese内都有内容时候隐藏软键盘
+    //TextWatcher监听, 当edEnglish和edChinese内都有内容时候隐藏软键盘
     val textWatcher:TextWatcher =  object :TextWatcher{
         override fun afterTextChanged(s: Editable?) {
 
@@ -110,13 +115,8 @@ class AddFragment : Fragment() {
 
 
 
-    private fun initView() {
-        floatActionButtonAdd = binding.floatingActionButton
-        edEnglish = binding.edEnglish
-        edChinese = binding.edChinese
-    }
 
-//    弹出软键盘(弹出软键盘需要控件拿到焦点)
+    //弹出软键盘(弹出软键盘需要控件拿到焦点)
     fun showSoftKeyboard(view: View) {
         if (view.requestFocus()) {
             val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -124,11 +124,7 @@ class AddFragment : Fragment() {
         }
     }
 
-//    隐藏软键盘
-    fun hideSoftKeyboard(view: View){
-        val imm =activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, InputMethodManager.SHOW_IMPLICIT)
-    }
+
 
 
 
