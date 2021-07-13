@@ -37,6 +37,9 @@ class AddFragment : Fragment() {
 
 
 
+
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add, container, false)
@@ -83,6 +86,7 @@ class AddFragment : Fragment() {
                 wordViewModel.insertWords(WordEntity( english, chinese))
 
                 findNavController().navigateUp()
+
             }
         }
 
@@ -98,19 +102,15 @@ class AddFragment : Fragment() {
     //TextWatcher监听, 当edEnglish和edChinese内都有内容时候隐藏软键盘
     val textWatcher:TextWatcher =  object :TextWatcher{
         override fun afterTextChanged(s: Editable?) {
-
         }
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
         }
-
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             val english = edEnglish.text.toString().trim()
             val chinese = edChinese.text.toString().trim()
             floatActionButtonAdd.isEnabled = !english.isEmpty() && !chinese.isEmpty()
         }
-
     }
 
 

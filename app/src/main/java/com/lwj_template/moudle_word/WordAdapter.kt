@@ -63,13 +63,7 @@ class WordAdapter(viewModel: WordViewModel): ListAdapter<WordEntity, WordAdapter
         val inflater: LayoutInflater = LayoutInflater.from(parent.context)
         val binding:WordItemContentBinding  = DataBindingUtil.inflate(inflater, R.layout.word_item_content, parent, false)
         val holder:WordViewHolder = WordViewHolder(binding)
-
-
-
         //**** 注意: 将view的事件监听放入刚刚创建的viewHolder中, 这样就不用每一次点击的时候都要去new一个匿名内部类了
-
-
-
         //整体的卡片式的布局设置监听, 打开百度翻译
         holder.cartView.setOnClickListener(){ v ->
 
@@ -83,10 +77,8 @@ class WordAdapter(viewModel: WordViewModel): ListAdapter<WordEntity, WordAdapter
 
         //点击开关控件隐藏和显示中文
         holder.switchHideChinese.setOnCheckedChangeListener(){switchView, isChecked->
-
             //当点击事件发生的时候先拿到holder下的这个数据, 拿到的是一个Object类型需要强转
             val word: WordEntity = holder.cartView.getTag(R.id.id_holder_word_for_view) as WordEntity
-
             if(isChecked){
                 holder.tvChinese.visibility = View.GONE
                 word?.isHideChineseMean = true
@@ -101,18 +93,12 @@ class WordAdapter(viewModel: WordViewModel): ListAdapter<WordEntity, WordAdapter
                 word?.run{
                     wordViewModel.updateWords(this)
                 }
-
             }
         }
-
         return holder
     }
 
-    //当viewHolder出现到屏幕上的时候, 将其序号更改
-    override fun onViewAttachedToWindow(holder: WordViewHolder) {
-        super.onViewAttachedToWindow(holder)
-        holder.tvId.text = (holder.adapterPosition + 1).toString()
-    }
+
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
         val word: WordEntity = getItem(position)
@@ -154,6 +140,11 @@ class WordAdapter(viewModel: WordViewModel): ListAdapter<WordEntity, WordAdapter
 */
 
 
+    }
+    //当viewHolder出现到屏幕上的时候, 将其序号更改
+    override fun onViewAttachedToWindow(holder: WordViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        holder.tvId.text = (holder.adapterPosition + 1).toString()
     }
 
 }

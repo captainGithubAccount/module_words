@@ -14,15 +14,20 @@ import android.widget.LinearLayout
 import android.widget.SearchView
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.lwj_template.moudle_word.databinding.FragmentWordBinding
 
 
@@ -35,6 +40,7 @@ class WordFragment : Fragment() {
     }
 
     var words: LiveData<List<WordEntity>>? = null
+
 
     private val binding get() = _binding!!
     private var _binding: FragmentWordBinding? = null
@@ -63,11 +69,10 @@ class WordFragment : Fragment() {
     }
 
 
+    //Fragment执行onResume生命周期方法时候隐藏软键盘
     override fun onResume() {
         super.onResume()
-
         hideSoftKeyboard()
-
     }
 
     //隐藏软键盘
@@ -87,10 +92,16 @@ class WordFragment : Fragment() {
         rv = binding.rvWordfragmentContent
 
     }
+
     private fun initEvent() {
-        floatingActionButton.setOnClickListener({ view ->
+
+        //支持导航到AddFragment碎片时, 回退键头出现
+        val navController = findNavController()
+        NavigationUI.setupActionBarWithNavController(activity as AppCompatActivity, navController)
+
+        floatingActionButton.setOnClickListener { view ->
             findNavController().navigate(R.id.addFragment)
-        })
+        }
 
     }
 
@@ -98,7 +109,7 @@ class WordFragment : Fragment() {
         initRecyclerView()
         words = wordViewModel.allWords
 
-        words?.observe(requireActivity(), Observer { wordList ->
+        words?.observe(viewLifecycleOwner, Observer { wordList ->
             var temp = wordAdapter.itemCount
             wordList?.run{
 
@@ -106,7 +117,6 @@ class WordFragment : Fragment() {
 
                     rv?.smoothScrollBy(0, 200)
                     //让插入数据后产生视觉反馈
-
                     wordAdapter.submitList(this)
 
                     //wordAdapter.notifyDataSetChanged()
@@ -126,31 +136,40 @@ class WordFragment : Fragment() {
         (menu.findItem(R.id.search_word_menu).actionView as SearchView).apply {
             maxWidth = 800
 
+            //searchView文本监听
             setOnQueryTextListener(object: SearchView.OnQueryTextListener{
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     return false
                 }
-
-
+                //当搜索框内文本发生改变时后台进行数据获取
                 override fun onQueryTextChange(newText: String?): Boolean {
                     newText?.run{
-                        words?.removeObservers(requireActivity())
+                        words?.removeObservers(viewLifecycleOwner)
                         words = wordViewModel.getSearchWords(newText)
 
-                        words?.observe(requireActivity()) { list ->
+                        //因为requireActivity作为owner的时候,之前的activity也没有删除掉,所以每次都会叠加新的activity作为owner,但是实际要求应该是只有一个owner
+                        words?.observe(viewLifecycleOwner) { list ->
                             wordAdapter.submitList(list)
                         }
                     }
                     return true
                 }
-
             })
+
+            //点击软键盘右上角收起(软键盘)键, 同时需要将搜索框变为搜索图标
+            /*setOnKeyListener { v, keyCode, event ->
+                if(keyCode == KeyEvent.){}
+            }*/
         }
 
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
+
+
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         var alertDialog: AlertDialog? = null
         when(item.itemId) {
@@ -198,7 +217,7 @@ class WordFragment : Fragment() {
                 override fun onAnimationFinished(viewHolder: RecyclerView.ViewHolder) {
                     super.onAnimationFinished(viewHolder)
 
-                    //插入一个item动画结束后, 更新数据
+                    //插入一个item动画结束后, 更新数据(序号)
                     val linnerLayoutManager: LinearLayoutManager = rv?.layoutManager as LinearLayoutManager
                     val first: Int = linnerLayoutManager.findFirstVisibleItemPosition()
                     val last: Int = linnerLayoutManager.findLastVisibleItemPosition()
@@ -211,6 +230,34 @@ class WordFragment : Fragment() {
             }
 
         }
+
+
+        //rv的item滑动删除某一项处理
+        object: ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0,( ItemTouchHelper.START or ItemTouchHelper.END)) {
+            /*
+            * @param dragDirs: 允许拖动的方向, 0表示不支持拖动
+            * @param swipeDirs: 允许滑动的方向, ItemTouchHelper.START: 从左向右开始滑动 ItemTouchHelper.END: 从右向左开始滑动
+            * */
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                //拿到要删除的item对应的WordEntity
+                val wordItemDelete: WordEntity? = words?.value?.get(viewHolder.adapterPosition)//words.value调用get方法很可能不能实时返回结果, 尤其是当正在异步查询的时候
+                wordItemDelete?.run{
+                    wordViewModel.deleteWords(this)
+                }
+
+                //误删除数据的撤销处理
+                Snackbar.make(binding.rvWordfragmentContent, "您删除了一条数据", Snackbar.LENGTH_SHORT)
+                        .setAction("撤销") { v ->
+                            wordViewModel.insertWords(wordItemDelete!!)
+                        }.show()
+
+            }
+        }){}.attachToRecyclerView(rv)
+
         /*val list:ArrayList<WordEntity>? = arrayListOf()
         for(item in 0..20){
             list?.add(WordEntity(item, "hello","你好", false ))

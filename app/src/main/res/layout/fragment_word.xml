@@ -7,7 +7,9 @@
 
     </data>
 
-    <FrameLayout
+    <!-- CollapsingToolbarLayout自动协调布局, 如当弹出撤销按钮时,FloatingActionButton上移 -->
+
+    <com.google.android.material.appbar.CollapsingToolbarLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".WordFragment">
@@ -33,5 +35,5 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </FrameLayout>
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
 </layout>
