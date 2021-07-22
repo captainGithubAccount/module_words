@@ -9,6 +9,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * The [ViewModel] that is attached to the [WordFragment].
+ */
 class WordViewModel(private val _wordRepository: WordRepository): ViewModel() {
     val allWords:LiveData<List<WordEntity>> by lazy { _wordRepository.allWords }
     val searchWords:LiveData<List<WordEntity>>? = null

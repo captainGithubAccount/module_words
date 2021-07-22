@@ -57,7 +57,9 @@ class WordFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_word, container, false)
+//        val bind = FragmentWordBinding.inflate(inflater)
         // Inflate the layout for this fragment
+
         return binding.root
     }
 
