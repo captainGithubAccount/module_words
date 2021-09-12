@@ -214,7 +214,7 @@ class WordFragment : Fragment() {
             adapter = wordAdapter
             //layoutManagerr(linearLayout(requireActivity()
             layoutManager = LinearLayoutManager(requireActivity())
-//            layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+            //layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             itemAnimator = object : DefaultItemAnimator() {
                 override fun onAnimationFinished(viewHolder: RecyclerView.ViewHolder) {
                     super.onAnimationFinished(viewHolder)
